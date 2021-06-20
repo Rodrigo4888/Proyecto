@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block content %}
+<div class="container mt-4">
+    <div class="p-4 m-4">
+
+        <div class="col-lg-5 rounded mx-auto border pt-4">
+
+            <div class="text-center col">
+
+                <img 
+
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkoAAABWCAMAAAAHdkliAAAAhFBMVEX///8AAACvr6+dnZ2KiopxcXHw8PAlJSWnp6f39/fn5+f6+voiIiI3NzegoKBLS0tkZGTa2tqSkpK6urqBgYFYWFgdHR1MTEzX19fKysoSEhJ3d3esrKzq6urg4OAZGRlBQUHMzMzBwcENDQ0wMDBra2s7OztUVFR9fX2Ojo5gYGAyMjJqgC0rAAAL5E
+                =" alt=""
+
+                class="" style="height: 50px;">
+
+                <p>Create una cuenta ahora</p>
+
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <input
+    type="submit"
+    id="btnregister"
+    class="btn btn-primary"
+    value="Registrate"
+  />
+</form>
+<script type="text/javascript">
+  $("#btnregister").click(function () {
+    Swal.fire({
+      icon: "success",
+      title: "You are registered",
+      text: "We send email with your information",
+    });
+  });
+</script>
+<p><a href="{% url 'home' %}">Volver al inicio</a></p>
+{% endblock %}
