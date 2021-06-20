@@ -18,3 +18,5 @@ six==1.15.0
 sqlparse==0.3.1
 urllib3==1.25.11
 whitenoise==5.2.0
+ptvsd==3.0.0
+django-ptvsd==3.0.0
