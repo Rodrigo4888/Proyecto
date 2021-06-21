@@ -99,8 +99,8 @@ class RegistrationView(FormView):
         '''
         # Login the user
         login(self.request, user)
-
         return super().form_valid(form)
+           
 
 
 class AddToCartView(View):
@@ -133,6 +133,36 @@ class AddToCartView(View):
         detalle_pedido.save()
         # Recarga la página
         return redirect(request.META['HTTP_REFERER'])
+
+class RemoveFromCartView(View):
+    def get(self, request, product_pk):
+        # Obten el cliente
+        try:
+            user_profile = Profile.objects.get(user=request.user)
+        except:
+            messages.info(request, 'Tienes que estar logueado para remover de carrito')
+            return redirect('home')
+        cliente = Cliente.objects.get(user_profile=user_profile)
+        # Obtén el producto que queremos añadir al carrito
+        producto = Producto.objects.get(pk=product_pk)
+        # Obtén/Crea un/el pedido en proceso (EP) del usuario
+        pedido, _  = Pedido.objects.get_or_create(cliente=cliente, estado='EP')
+        # Obtén/Crea un/el detalle de pedido
+        detalle_pedido = DetallePedido.objects.get(
+            producto=producto,
+            pedido=pedido,
+        )
+        # Si la cantidad actual menos 1 es 0 elmina el producto del carrito
+        # Si no restamos 1 a la cantidad actual
+        if detalle_pedido.cantidad - 1 == 0:
+            detalle_pedido.delete()
+        else:
+            detalle_pedido.cantidad = F('cantidad') - 1
+            # Guardamos los cambios
+            detalle_pedido.save()
+        # Recarga la página
+        return redirect(request.META['HTTP_REFERER'])
+
 
 class RemoveFromCartView(View):
     def get(self, request, product_pk):
